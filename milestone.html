@@ -1,0 +1,776 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JeivenzHS Grade Journey</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    color: #fff;
+    background:
+        radial-gradient(circle at 50% 20%, rgba(180,0,0,.25), transparent 35%),
+        linear-gradient(135deg, #030303 0%, #100000 45%, #050505 100%);
+    overflow-x: hidden;
+}
+
+/* SPIDER WEB BACKGROUND */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    pointer-events: none;
+    opacity: .13;
+    z-index: -1;
+    background-image:
+        repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0 55px,
+            #ddd 56px 58px,
+            transparent 59px 110px
+        );
+    transform: rotate(8deg) scale(1.5);
+}
+
+body::after {
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 80px,
+            rgba(255,255,255,.8) 81px 82px,
+            transparent 83px 160px
+        );
+    transform: rotate(45deg) scale(2);
+    opacity: .05;
+}
+
+/* HEADER */
+header {
+    padding: 28px 20px;
+    text-align: center;
+    background:
+        linear-gradient(180deg, rgba(100,0,0,.75), rgba(0,0,0,.95));
+    border-bottom: 2px solid #d40000;
+    box-shadow: 0 0 35px rgba(210,0,0,.35);
+}
+
+.logo {
+    font-size: clamp(28px, 5vw, 55px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+        0 0 5px #fff,
+        0 0 15px #e00000,
+        0 0 35px #a00000;
+}
+
+.logo span {
+    color: #e00000;
+}
+
+.subtitle {
+    margin-top: 8px;
+    color: #bbb;
+    letter-spacing: 2px;
+    font-size: 13px;
+}
+
+/* CONTAINER */
+.container {
+    width: min(1400px, 94%);
+    margin: 25px auto 60px;
+}
+
+/* CONTROLS */
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.control-box {
+    background: rgba(15,15,15,.92);
+    border: 1px solid #3c3c3c;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.45);
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #090909;
+    color: white;
+    outline: none;
+}
+
+select:focus,
+input:focus {
+    border-color: #e00000;
+    box-shadow: 0 0 10px rgba(220,0,0,.3);
+}
+
+/* FINAL AVERAGE */
+.average-card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 22px;
+    padding: 25px;
+    border-radius: 16px;
+    border: 2px solid #b00000;
+    background:
+        radial-gradient(circle at center, rgba(200,0,0,.25), transparent 65%),
+        linear-gradient(145deg, #170000, #050505);
+    box-shadow:
+        0 0 25px rgba(180,0,0,.25),
+        inset 0 0 30px rgba(120,0,0,.12);
+}
+
+.average-title {
+    font-size: 14px;
+    color: #bbb;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.average-number {
+    font-size: clamp(48px, 9vw, 90px);
+    font-weight: 900;
+    margin-top: 5px;
+    color: #fff;
+    text-shadow:
+        0 0 8px #fff,
+        0 0 25px #e00000,
+        0 0 50px #900000;
+}
+
+.average-status {
+    color: #ddd;
+    margin-top: 5px;
+}
+
+/* TABLE */
+.table-container {
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1px solid #333;
+    background: rgba(5,5,5,.95);
+    box-shadow: 0 15px 50px rgba(0,0,0,.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+thead {
+    background: linear-gradient(180deg, #8d0000, #3c0000);
+}
+
+th {
+    padding: 15px 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    border-right: 1px solid rgba(255,255,255,.12);
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #292929;
+    border-right: 1px solid #202020;
+    text-align: center;
+}
+
+td:first-child {
+    text-align: left;
+    font-weight: bold;
+}
+
+tr:hover {
+    background: rgba(180,0,0,.08);
+}
+
+.grade-input {
+    width: 85px;
+    text-align: center;
+    padding: 9px;
+    font-weight: bold;
+}
+
+.final-grade {
+    font-size: 18px;
+    font-weight: 900;
+    color: #ff3030;
+    text-shadow: 0 0 8px rgba(255,0,0,.35);
+}
+
+.optional {
+    color: #777;
+}
+
+/* BUTTONS */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #c40000, #650000);
+    box-shadow: 0 5px 15px rgba(150,0,0,.25);
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+}
+
+button.secondary {
+    background: #222;
+}
+
+button.danger {
+    background: linear-gradient(135deg, #800000, #300000);
+}
+
+/* INFO */
+.info {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(20,20,20,.9);
+    border-left: 4px solid #c00000;
+    border-radius: 8px;
+    color: #aaa;
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #555;
+    font-size: 12px;
+}
+
+/* MOBILE */
+@media (max-width: 800px) {
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        width: 96%;
+    }
+
+    .average-card {
+        padding: 20px 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        JEIVENZ<span>HS</span> GRADE JOURNEY
+    </div>
+    <div class="subtitle">
+        YOUR ACADEMIC JOURNEY • GRADE 7 — GRADE 12
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="controls">
+
+        <div class="control-box">
+            <label>Grade Level</label>
+            <select id="gradeSelect" onchange="loadGrade()">
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+            </select>
+        </div>
+
+        <div class="control-box">
+            <label>School Year</label>
+            <select id="schoolYear" onchange="loadGrades()">
+                <option>2026-2027</option>
+                <option>2025-2026</option>
+                <option>2024-2025</option>
+                <option>2023-2024</option>
+                <option>2022-2023</option>
+                <option>2021-2022</option>
+                <option>2020-2021</option>
+                <option>2019-2020</option>
+            </select>
+        </div>
+
+        <div class="control-box">
+            <label>Search Subject</label>
+            <input
+                type="search"
+                id="search"
+                placeholder="Search subject..."
+                oninput="searchSubjects()"
+            >
+        </div>
+
+    </section>
+
+    <!-- FINAL AVERAGE -->
+    <section class="average-card">
+        <div class="average-title">Final Average</div>
+        <div class="average-number" id="finalAverage">—</div>
+        <div class="average-status" id="averageStatus">
+            Enter your grades below
+        </div>
+    </section>
+
+    <!-- GRADES TABLE -->
+    <section class="table-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Quarter 1</th>
+                    <th>Quarter 2</th>
+                    <th>Quarter 3</th>
+                    <th>Quarter 4<br><small>(Optional)</small></th>
+                    <th>Final Grade</th>
+                </tr>
+            </thead>
+
+            <tbody id="gradeTable"></tbody>
+        </table>
+
+    </section>
+
+    <div class="actions">
+        <button onclick="addSubject()">＋ Add Subject</button>
+        <button onclick="saveGrades()">💾 Save Grades</button>
+        <button class="secondary" onclick="clearGrades()">↻ Clear Grades</button>
+        <button class="danger" onclick="deleteSubject()">− Remove Last Subject</button>
+    </div>
+
+    <div class="info">
+        <strong>How it works:</strong><br>
+        Enter your grades for each quarter. If your school year has only
+        3 quarters, simply leave Quarter 4 blank. The website will automatically
+        calculate the Final Grade for each subject and your overall Final Average.
+    </div>
+
+</main>
+
+<footer>
+    © 2026 JeivenzHS Grade Journey • Academic Record
+</footer>
+
+
+<script>
+
+const defaultSubjects = {
+    7: [
+        "Mathematics",
+        "Science",
+        "English",
+        "Filipino",
+        "Araling Panlipunan",
+        "Edukasyon sa Pagpapakatao",
+        "MAPEH",
+        "Technology and Livelihood Education"
+    ],
+    8: [
+        "Mathematics",
+        "Science",
+        "English",
+        "Filipino",
+        "Araling Panlipunan",
+        "Edukasyon sa Pagpapakatao",
+        "MAPEH",
+        "Technology and Livelihood Education"
+    ],
+    9: [
+        "Mathematics",
+        "Science",
+        "English",
+        "Filipino",
+        "Araling Panlipunan",
+        "Edukasyon sa Pagpapakatao",
+        "MAPEH",
+        "Technology and Livelihood Education"
+    ],
+    10: [
+        "Mathematics",
+        "Science",
+        "English",
+        "Filipino",
+        "Araling Panlipunan",
+        "Edukasyon sa Pagpapakatao",
+        "MAPEH",
+        "Technology and Livelihood Education"
+    ],
+    11: [
+        "General Mathematics",
+        "Statistics and Probability",
+        "Earth and Life Science",
+        "21st Century Literature",
+        "Oral Communication",
+        "Physical Education",
+        "Personal Development",
+        "Major Subject"
+    ],
+    12: [
+        "General Mathematics",
+        "Statistics and Probability",
+        "Earth and Life Science",
+        "21st Century Literature",
+        "English for Academic Purposes",
+        "Physical Education",
+        "Personal Development",
+        "Major Subject"
+    ]
+};
+
+let currentSubjects = [];
+
+function storageKey() {
+    return "jeivenz_grade_"
+        + document.getElementById("gradeSelect").value
+        + "_"
+        + document.getElementById("schoolYear").value;
+}
+
+function loadGrade() {
+    const grade = document.getElementById("gradeSelect").value;
+
+    const saved = localStorage.getItem(storageKey());
+
+    if (saved) {
+        currentSubjects = JSON.parse(saved);
+    } else {
+        currentSubjects = defaultSubjects[grade].map(name => ({
+            name: name,
+            q1: "",
+            q2: "",
+            q3: "",
+            q4: ""
+        }));
+    }
+
+    renderTable();
+}
+
+function loadGrades() {
+    loadGrade();
+}
+
+function renderTable() {
+
+    const tbody = document.getElementById("gradeTable");
+
+    tbody.innerHTML = "";
+
+    currentSubjects.forEach((subject, index) => {
+
+        const tr = document.createElement("tr");
+
+        tr.dataset.subject = subject.name.toLowerCase();
+
+        tr.innerHTML = `
+            <td>
+                <input
+                    value="${escapeHTML(subject.name)}"
+                    onchange="updateName(${index}, this.value)"
+                    style="font-weight:bold;"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="grade-input"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="${subject.q1}"
+                    onchange="updateGrade(${index}, 'q1', this.value)"
+                    placeholder="—"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="grade-input"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="${subject.q2}"
+                    onchange="updateGrade(${index}, 'q2', this.value)"
+                    placeholder="—"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="grade-input"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="${subject.q3}"
+                    onchange="updateGrade(${index}, 'q3', this.value)"
+                    placeholder="—"
+                >
+            </td>
+
+            <td>
+                <input
+                    class="grade-input"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value="${subject.q4}"
+                    onchange="updateGrade(${index}, 'q4', this.value)"
+                    placeholder="Optional"
+                >
+            </td>
+
+            <td class="final-grade" id="final-${index}">
+                —
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+        updateFinal(index);
+    });
+
+    calculateAverage();
+}
+
+function updateName(index, value) {
+    currentSubjects[index].name = value;
+    saveGrades(false);
+}
+
+function updateGrade(index, quarter, value) {
+
+    if (value !== "") {
+
+        let number = Number(value);
+
+        if (number < 0) number = 0;
+        if (number > 100) number = 100;
+
+        currentSubjects[index][quarter] = number;
+    } else {
+        currentSubjects[index][quarter] = "";
+    }
+
+    updateFinal(index);
+    calculateAverage();
+    saveGrades(false);
+}
+
+function updateFinal(index) {
+
+    const subject = currentSubjects[index];
+
+    const grades = [
+        subject.q1,
+        subject.q2,
+        subject.q3,
+        subject.q4
+    ]
+    .filter(g => g !== "" && g !== null && g !== undefined)
+    .map(Number);
+
+    const cell = document.getElementById("final-" + index);
+
+    if (grades.length === 0) {
+        cell.textContent = "—";
+        return;
+    }
+
+    const final = grades.reduce((a,b) => a+b, 0) / grades.length;
+
+    cell.textContent = final.toFixed(2);
+}
+
+function calculateAverage() {
+
+    let finals = [];
+
+    currentSubjects.forEach((subject) => {
+
+        const grades = [
+            subject.q1,
+            subject.q2,
+            subject.q3,
+            subject.q4
+        ]
+        .filter(g => g !== "" && g !== null && g !== undefined)
+        .map(Number);
+
+        if (grades.length > 0) {
+
+            const final =
+                grades.reduce((a,b) => a+b, 0) / grades.length;
+
+            finals.push(final);
+        }
+    });
+
+    const average = document.getElementById("finalAverage");
+    const status = document.getElementById("averageStatus");
+
+    if (finals.length === 0) {
+        average.textContent = "—";
+        status.textContent = "Enter your grades below";
+        return;
+    }
+
+    const result =
+        finals.reduce((a,b) => a+b, 0) / finals.length;
+
+    average.textContent = result.toFixed(2);
+
+    if (result >= 90) {
+        status.textContent = "Excellent performance!";
+    } else if (result >= 85) {
+        status.textContent = "Very good performance!";
+    } else if (result >= 75) {
+        status.textContent = "Passed";
+    } else {
+        status.textContent = "Keep working hard!";
+    }
+}
+
+function addSubject() {
+
+    currentSubjects.push({
+        name: "New Subject",
+        q1: "",
+        q2: "",
+        q3: "",
+        q4: ""
+    });
+
+    renderTable();
+    saveGrades(false);
+}
+
+function deleteSubject() {
+
+    if (currentSubjects.length <= 1) {
+        alert("You need at least one subject.");
+        return;
+    }
+
+    currentSubjects.pop();
+
+    renderTable();
+    saveGrades(false);
+}
+
+function saveGrades(showMessage = true) {
+
+    localStorage.setItem(
+        storageKey(),
+        JSON.stringify(currentSubjects)
+    );
+
+    if (showMessage) {
+        alert("Grades saved successfully!");
+    }
+}
+
+function clearGrades() {
+
+    if (!confirm("Clear all grades for this Grade Level and School Year?")) {
+        return;
+    }
+
+    currentSubjects.forEach(subject => {
+        subject.q1 = "";
+        subject.q2 = "";
+        subject.q3 = "";
+        subject.q4 = "";
+    });
+
+    renderTable();
+    saveGrades(false);
+}
+
+function searchSubjects() {
+
+    const search =
+        document.getElementById("search").value.toLowerCase();
+
+    document.querySelectorAll("#gradeTable tr").forEach(row => {
+
+        const subject =
+            row.dataset.subject || "";
+
+        row.style.display =
+            subject.includes(search) ? "" : "none";
+    });
+}
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+/* INITIAL LOAD */
+loadGrade();
+
+</script>
+
+</body>
+</html>
+```
